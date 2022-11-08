@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-const newprice = () => {
+const NewsPrices = () => {
   return (
     <div>
         <section class="text-gray-600 body-font overflow-hidden">
@@ -160,4 +160,4 @@ const newprice = () => {
   )
 }
 
-export default newprice
+export default NewsPrices

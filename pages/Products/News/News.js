@@ -215,7 +215,7 @@ const News = () => {
         setconname("PAK")
     }
     return (
-        <>
+        <div className='bg-black'>
             <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
@@ -251,12 +251,12 @@ const News = () => {
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
-            <div>
+            <div className='bg-black text-white'>
                 <Time/>
                 {/*<h1 style={{backgroundColor:"black",width:"100%",height:"50px",color:"white",textAlign:"center",fontFamily: "font-family: 'Oswald', sans-serif;"}}>WEATHER REPORT</h1>*/}
             </div>
            {/*<Wstack/>*/}
-            <ul className="nav justify-content-center my-3">
+            <ul className="nav justify-content-center my-3 bg-black ">
                 <span style={{ fontSize: "1.2rem", color: "white" }}>
                     <i onClick={nation} class="far fa-flag" style={{color:`${back1}`}}></i>&nbsp;&nbsp;
                 </span>
@@ -303,7 +303,7 @@ const News = () => {
                     </ul>
                 </div>
             </ul>
-            <div classNameName="container">
+            <div className="container bg-black ">
                 <h1 style={{ color: "white", fontSize: "larger", fontFamily: " 'Cinzel', serif;", marginLeft: "5px" }}>   ARTICLES ON {categ}</h1>
                 <p style={{ color: "white", marginLeft: "5px", color: "skyblue" }}>SELECTED COUNTRY: {conname} & CATEG: {categ}</p>
             </div>
@@ -313,7 +313,7 @@ const News = () => {
             ):(
                 
                 <>
-                <div className="row" style={{border:"2px"}}>
+                <div className="row bg-black" style={{border:"2px"}}>
                 {article.map((item, index) => {
                     return (
                         <>
@@ -343,7 +343,7 @@ const News = () => {
             </div>
             
 
-        </>
+        </div>
         
     )
 }

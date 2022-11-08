@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import {toast , ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 const signup = () => {
