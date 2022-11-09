@@ -8,7 +8,7 @@ const Homepage = () => {
   useEffect(() => {
     const secretKey = "secret123"
     const token = localStorage.getItem("token")
-    const decode_JWT = jwt.verify(token,secretKey)
+    const decode_JWT = jwt.decode(token)
     const email = decode_JWT.email
     console.log(email)
     const data = {  email };
