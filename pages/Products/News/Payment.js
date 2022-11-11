@@ -26,12 +26,14 @@ const Payment = () => {
     const res = await responce.json();
     console.log(res.body.data.id)
     updateTransactionId(res.body.data.id)
+    addNewsTransactionId(res.body.data.id)
     setTimeout(()=>{
       move(res.body.data.id)
     },1000)
   };
 
   const updateSubscriptionStatus = async () => {
+
     let res = await fetch("http://localhost:3000/api/updatenewssub", {
       method: "POST",
       headers: {
@@ -44,11 +46,6 @@ const Payment = () => {
 
   };
 
-  const move = (transactionId) =>{
-    router.push(`/Products/News/Invoice?transactionId=${transactionId}`)
-  }
-
-
   const updateTransactionId = async (transactionId) =>{
     const dataForTransactionUpdation = {email ,transactionId}
     console.log(transactionId)
@@ -60,11 +57,27 @@ const Payment = () => {
       body: JSON.stringify(dataForTransactionUpdation),
     });
     let responce = await res.json();
-  console.log(responce);
-  
-
+    console.log(responce);
+    
   }
-
+  
+  const addNewsTransactionId = async (transactionIdnews) =>{
+    const dataForNewsTransactionId = {email , transactionIdnews}
+    let res = await fetch("http://localhost:3000/api/addnewspayid",{
+      method : "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify(dataForNewsTransactionId)
+    });
+    let responce = await res.json()
+    console.log(responce) 
+  }
+  
+  const move = (transactionId) =>{
+    router.push(`/Products/News/Invoice?transactionId=${transactionId}`)
+  }
+  
   return (
     <>
       <div class="container px-5 py-5 mx-auto flex flex-wrap">

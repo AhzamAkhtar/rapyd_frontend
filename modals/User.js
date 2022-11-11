@@ -4,11 +4,12 @@ const UserSchema = new mongoose.Schema({
     name : {type:String , required:true},
     email : {type :String , required:true , unique :true},
     password:{type:String , required:true},
-    news : {type:Boolean , default : true},
+    news : {type:Boolean , default : false},
     // use default 
-    payments :  [
+    allpayments :  [
         
-    ]
+    ],
+    newspayment : {type : String , default: null}
 },{timestamps:true})
 
 mongoose.models = {}
