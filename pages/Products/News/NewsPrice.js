@@ -12,7 +12,7 @@ const data = [
     p2ClassName: false,
     p3: "Browse Latest News Update Of Upto 10 Different Countries",
     p3ClassName: false,
-    link : "/Products/News/Payment?amount=10"
+    link : "/Products/News/Payment?amount=10&type=starter"
   },
   {
     type: "PRO",
@@ -23,7 +23,7 @@ const data = [
     p2ClassName: true,
     p3: "Browse Latest News Update Of Upto 10 Different Countries",
     p3ClassName: false,
-    link : "/Products/News/Payment?amount=100"
+    link : "/Products/News/Payment?amount=100&type=pro"
   },
   {
     type: "PREMIUM",
@@ -34,7 +34,7 @@ const data = [
     p2ClassName: true,
     p3: "Browse Latest News Update Of Upto 10 Different Countries",
     p3ClassName: true,
-    link : "/Products/News/Payment?amount=999"
+    link : "/Products/News/Payment?amount=999&type=premium"
   },
 ];
 const NewsPrices = () => {
