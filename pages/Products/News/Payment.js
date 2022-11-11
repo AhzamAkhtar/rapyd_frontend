@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { HiDocumentText } from "react-icons/hi";
 import { MdPayment } from "react-icons/md";
+
 const jwt = require('jsonwebtoken')
 const Payment = () => {
+
   const router = useRouter();
   console.log(router.query);
 
@@ -12,12 +14,24 @@ const Payment = () => {
   const decode_JWT = jwt.decode(token);
   const email = decode_JWT.email;
   console.log(email);
+
   const data = { email };
 
   const { amount, type } = router.query;
   
+  const pay = async () => {
+    const responce = await fetch(
+      `http://localhost:3005/payment?amount=${amount}`
+    );
+    const res = await responce.json();
+    console.log(res.body.data.id)
+    updateTransactionId(res.body.data.id)
+    setTimeout(()=>{
+      move(res.body.data.id)
+    },1000)
+  };
+
   const updateSubscriptionStatus = async () => {
-   
     let res = await fetch("http://localhost:3000/api/updatenewssub", {
       method: "POST",
       headers: {
@@ -27,17 +41,29 @@ const Payment = () => {
     });
     let responce = await res.json();
     console.log(responce);
+
   };
 
-  const pay = async () => {
+  const move = (transactionId) =>{
+    router.push(`/Products/News/Invoice?transactionId=${transactionId}`)
+  }
 
-    const responce = await fetch(
-      `http://localhost:3005/payment?amount=${amount}`
-    );
-    const res = await responce.json();
-    console.log(res);
-  };
 
+  const updateTransactionId = async (transactionId) =>{
+    const dataForTransactionUpdation = {email ,transactionId}
+    console.log(transactionId)
+    let res = await fetch("http://localhost:3000/api/updatetransactionid", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataForTransactionUpdation),
+    });
+    let responce = await res.json();
+  console.log(responce);
+  
+
+  }
 
   return (
     <>
@@ -237,6 +263,7 @@ const Payment = () => {
               onClick={()=>{
                 pay()
                 updateSubscriptionStatus()
+                
               }}
               class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
             >
