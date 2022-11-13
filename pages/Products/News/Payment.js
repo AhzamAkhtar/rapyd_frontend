@@ -1,83 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { HiDocumentText } from "react-icons/hi";
-import { MdPayment } from "react-icons/md";
 
-const jwt = require('jsonwebtoken')
 const Payment = () => {
+  const [name, setname] = useState();
+  const [phone, setphone] = useState();
+  const [email, setemail] = useState();
+  const [address,setaddress] = useState()
+  const [cardNumber, setcardNumber] = useState();
+  const [holderName, setholderName] = useState();
+  const [expiration, setexpiration] = useState();
+  const [cvv, setcvv] = useState();
 
+  const changeHandler = (e) => {
+    if (e.target.name == "name") {
+      setname(e.target.value);
+    }
+    if (e.target.name == "phone") {
+      setphone(e.target.value);
+    }
+    if (e.target.name == "email") {
+      setemail(e.target.value);
+    }
+    if (e.target.name == "cardNumber") {
+      setcardNumber(e.target.value);
+    }
+    if (e.target.name == "holderName") {
+      setholderName(e.target.value);
+
+    }
+    if (e.target.name == "expiration") {
+      setexpiration(e.target.value);
+    }
+    if (e.target.name == "cvv") {
+      setcvv(e.target.value);
+    }
+    if(e.target.name=="address"){
+      setaddress(e.target.value)
+    }
+  };
+
+  
   const router = useRouter();
   console.log(router.query);
-
-  const secretKey = "secret123";
-  const token = localStorage.getItem("token");
-  const decode_JWT = jwt.decode(token);
-  const email = decode_JWT.email;
-  console.log(email);
-
-  const data = { email };
-
   const { amount, type } = router.query;
-  
+
   const pay = async () => {
     const responce = await fetch(
-      `http://localhost:3005/payment?amount=${amount}`
+      `http://localhost:3005/payment?amount=999`
     );
     const res = await responce.json();
-    console.log(res.body.data.id)
-    updateTransactionId(res.body.data.id)
-    addNewsTransactionId(res.body.data.id)
-    setTimeout(()=>{
-      move(res.body.data.id)
-    },1000)
+    //console.log(res)
+    //console.log(res.body.data.id);
+    setTimeout(() => {
+      move(res.body.data.id);
+    }, 1000);
   };
 
-  const updateSubscriptionStatus = async () => {
-
-    let res = await fetch("http://localhost:3000/api/updatenewssub", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    let responce = await res.json();
-    console.log(responce);
-
-  };
-
-  const updateTransactionId = async (transactionId) =>{
-    const dataForTransactionUpdation = {email ,transactionId}
-    console.log(transactionId)
-    let res = await fetch("http://localhost:3000/api/updatetransactionid", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataForTransactionUpdation),
-    });
-    let responce = await res.json();
-    console.log(responce);
-    
-  }
-  
-  const addNewsTransactionId = async (transactionIdnews) =>{
-    const dataForNewsTransactionId = {email , transactionIdnews}
-    let res = await fetch("http://localhost:3000/api/addnewspayid",{
-      method : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body : JSON.stringify(dataForNewsTransactionId)
-    });
-    let responce = await res.json()
-    console.log(responce) 
-  }
-  
-  const move = (transactionId) =>{
+  const move = (transactionId) => {
     router.push(`/Products/News/Invoice?transactionId=${transactionId}`)
-  }
-  
+  };
+
   return (
     <>
       <section>
@@ -93,7 +75,7 @@ const Payment = () => {
                     </h5>
                     <span class="ps-2">Pay</span>
                   </div>
-                  <h4 class="text-success">{"$"+amount}</h4>
+                  <h4 class="text-success">{"$" + amount}</h4>
                   <h4>Diabetes Pump & Supplies</h4>
 
                   <p>
@@ -114,7 +96,10 @@ const Payment = () => {
                                   <div class="form-outline">
                                     <input
                                       type="text"
-                                      id="typeText"
+                                      id="cardNumber"
+                                      value={cardNumber}
+                                      name="cardNumber"
+                                      onChange={changeHandler}
                                       class="form-control form-control-lg"
                                       siez="17"
                                       placeholder="1234 5678 9012 3457"
@@ -136,7 +121,10 @@ const Payment = () => {
                                   <div class="form-outline">
                                     <input
                                       type="text"
-                                      id="typeName"
+                                      id="holderName"
+                                      value={holderName}
+                                      name="holderName"
+                                      onChange={changeHandler}
                                       class="form-control form-control-lg"
                                       siez="17"
                                       placeholder="Cardholder's Name"
@@ -151,7 +139,10 @@ const Payment = () => {
                                   <div class="form-outline">
                                     <input
                                       type="text"
-                                      id="typeExp"
+                                      id="expiration"
+                                      value={expiration}
+                                      name="expiration"
+                                      onChange={changeHandler}
                                       class="form-control form-control-lg"
                                       placeholder="MM/YYYY"
                                       size="7"
@@ -165,7 +156,10 @@ const Payment = () => {
                                   <div class="form-outline">
                                     <input
                                       type="password"
-                                      id="typeText2"
+                                      id="cvv"
+                                      value={cvv}
+                                      name="cvv"
+                                      onChange={changeHandler}
                                       class="form-control form-control-lg"
                                       placeholder="&#9679;&#9679;&#9679;"
                                       size="1"
@@ -176,12 +170,6 @@ const Payment = () => {
                                       Cvv
                                     </label>
                                   </div>
-                                  <button
-                                    type="button"
-                                    class="btn btn-info btn-lg btn-rounded"
-                                  >
-                                    <i class="fas fa-arrow-right"></i>
-                                  </button>
                                 </div>
                               </form>
                             </div>
@@ -194,7 +182,10 @@ const Payment = () => {
                         <div class="form-outline">
                           <input
                             type="text"
-                            id="form8Example1"
+                            id="name"
+                            value={name}
+                            onChange={changeHandler}
+                            name="name"
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example1">
@@ -206,7 +197,10 @@ const Payment = () => {
                         <div class="form-outline">
                           <input
                             type="email"
-                            id="form8Example2"
+                            id="email"
+                            value={email}
+                            onChange={changeHandler}
+                            name="email"
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example2">
@@ -222,58 +216,65 @@ const Payment = () => {
                       <div class="col">
                         <div class="form-outline">
                           <input
-                            type="text"
-                            id="form8Example3"
+                            type="number"
+                            id="phone"
+                            value={phone}
+                            onChange = {changeHandler}
+                            name = "phone"
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example3">
-                            First name
+                            Phone
                           </label>
                         </div>
                       </div>
+                      
                       <div class="col">
                         <div class="form-outline">
                           <input
                             type="text"
-                            id="form8Example4"
-                            class="form-control"
-                          />
-                          <label class="form-label" for="form8Example4">
-                            Last name
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-outline">
-                          <input
-                            type="email"
-                            id="form8Example5"
+                            id="address"
+                            value={address}
+                            onChange = {changeHandler}
+                            name ="address"
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example5">
-                            Email address
+                           Address
                           </label>
                         </div>
                       </div>
                     </div>
                   </section>
+                  <button
+                    type="button"
+                    class="btn btn-success w-full rounded-pill"
+                    onClick={() => {
+                      pay();
+                    }}
+                  >
+                    Proceed and Pay
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-warning w-full rounded-pill mt-2"
+                  >
+                    Generate Invoice and Pay
+                  </button>
                 </div>
 
                 <div class="col-md-5 col-xl-4 offset-xl-1">
                   <div class="py-4 d-flex justify-content-end">
-                    <button type="button" class="btn btn-success mx-3" onClick={()=>{
-                      pay()
-                      updateSubscriptionStatus()
-                    }}>
-                      Proceed
-                    </button>
-                    <button type="button" class="btn btn-danger">
-                      Cancel
+                    <button
+                      type="button"
+                      class="btn btn-danger w-full rounded-pill "
+                    >
+                      Cancel Order
                     </button>
                   </div>
                   <div class="rounded d-flex flex-column p-2">
                     <div class="p-2 me-3">
-                      <h4>Order Recap</h4>
+                      <h4>Order Summary</h4>
                     </div>
                     <div class="p-2 d-flex">
                       <div class="col-8">Contracted Price</div>
@@ -287,7 +288,7 @@ const Payment = () => {
                       <div class="col-8">Product Type</div>
                       <div class="ms-auto">{type.toUpperCase()}</div>
                     </div>
-                    
+
                     <div class="border-top px-2 mx-2"></div>
 
                     <div class="p-2 d-flex">
@@ -296,7 +297,7 @@ const Payment = () => {
                         <span class="fa fa-question-circle text-dark"></span>
                       </div>
                       <div class="ms-auto">
-                        <b>{"$"+amount}</b>
+                        <b>{"$" + amount}</b>
                       </div>
                     </div>
                     <div class="border-top px-2 mx-2"></div>
@@ -305,7 +306,7 @@ const Payment = () => {
                         <b>Total</b>
                       </div>
                       <div class="ms-auto">
-                        <b class="text-success">{"$"+amount}</b>
+                        <b class="text-success">{"$" + amount}</b>
                       </div>
                     </div>
                   </div>
