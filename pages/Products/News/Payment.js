@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 
+const jwt = require("jsonwebtoken");
 const Payment = () => {
   const [name, setname] = useState();
   const [phone, setphone] = useState();
@@ -46,18 +47,18 @@ const Payment = () => {
 
   const pay = async () => {
     const responce = await fetch(
-      `http://localhost:3005/payment?amount=999`
+      `http://localhost:3005/payment?amount=${amount}&name=${name}&receipt_email=${email}&line_1=${address}`
     );
     const res = await responce.json();
-    //console.log(res)
-    //console.log(res.body.data.id);
+    console.log(res)
+    console.log(res.body.data.id);
     setTimeout(() => {
       move(res.body.data.id);
     }, 1000);
   };
 
   const move = (transactionId) => {
-    router.push(`/Products/News/Invoice?transactionId=${transactionId}`)
+    router.push(`/Products/News/Invoice?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${email}&line_1=${address}&phone_number=${phone}`)
   };
 
   return (

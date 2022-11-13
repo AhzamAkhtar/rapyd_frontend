@@ -29,9 +29,9 @@ const Invoice = () => {
   const secretKey = "secret123";
   const token = localStorage.getItem("token");
   const decode_JWT = jwt.decode(token);
-  const currentUserEmail = decode_JWT.email;
-  console.log(currentUserEmail);
-  const data = { currentUserEmail };
+  const email = decode_JWT.email;
+  console.log(email);
+  const data = { email };
 
 
   
@@ -50,7 +50,7 @@ const Invoice = () => {
   };
 
   const updateTransactionId = async (transactionId) =>{
-    const dataForTransactionUpdation = {currentUserEmail ,transactionId}
+    const dataForTransactionUpdation = {email ,transactionId}
     console.log(transactionId)
     let res = await fetch("http://localhost:3000/api/updatetransactionid", {
       method: "POST",
@@ -65,7 +65,7 @@ const Invoice = () => {
   }
 
   const addNewsTransactionId = async (transactionIdnews) =>{
-    const dataForNewsTransactionId = {currentUserEmail , transactionIdnews}
+    const dataForNewsTransactionId = {email , transactionIdnews}
     let res = await fetch("http://localhost:3000/api/addnewspayid",{
       method : "POST",
       headers: {
@@ -75,6 +75,12 @@ const Invoice = () => {
     });
     let responce = await res.json()
     console.log(responce) 
+  }
+
+  const completePayment = async () =>{
+    const responce = await fetch(`http://localhost:3005/complete?token=${transactionId}`)
+    const res = await responce.json()
+    console.log(res)
   }
 
   return (
@@ -229,8 +235,10 @@ const Invoice = () => {
                     </div>
                   </div>
                   <button class="text-white bg-green-400 w-full border-0 py-2 px-6 mt-10 focus:outline-none hover:bg-green-600 rounded-3xl text-lg" onClick={() => {
-                      //pay()
-                      //updateSubscriptionStatus()
+                      updateSubscriptionStatus()
+                      updateTransactionId(transactionId)
+                      addNewsTransactionId(transactionId)
+                      completePayment()
                     }}> {" "}
                     Pay ${amount}</button>
                   
