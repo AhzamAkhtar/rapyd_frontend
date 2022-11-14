@@ -55,6 +55,7 @@ const Homepage = () => {
     console.log(res.success)
     setTimeout(()=>{
       refund(res.success)
+      updateAllTransaction(res.success)
     },1000)
   }
 
@@ -102,6 +103,23 @@ const Homepage = () => {
     console.log(res)
   }
 
+  const updateAllTransaction = async(transactionId) =>{
+    const secretKey = "secret123";
+    const token = localStorage.getItem("token");
+    const decode_JWT = jwt.decode(token);
+    const email = decode_JWT.email;
+    console.log(email);
+    const data = {email, transactionId}
+    const responce = await fetch("http://localhost:3000/api/updateallpayments",{
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    const res = await responce.json()
+    console.log(res)
+  }
   return (
     <>
       <div>
