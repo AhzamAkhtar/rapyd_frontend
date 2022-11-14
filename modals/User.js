@@ -9,7 +9,10 @@ const UserSchema = new mongoose.Schema({
     allpayments :  [
         
     ],
-    newspayment : {type : String , default: null}
+    newspayment : {type : String , default: null},
+    refund_payments :[
+        
+    ]
 },{timestamps:true})
 
 mongoose.models = {}

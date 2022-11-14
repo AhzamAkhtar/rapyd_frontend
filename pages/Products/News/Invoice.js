@@ -23,7 +23,7 @@ const Invoice = () => {
 
   const router = useRouter();
 
-  const { transactionId  , amount , type , name , receipt_email, phone_number , line_1 } = router.query;
+  const { transactionId  , amount , type , name , receipt_email, phone_number , line_1 } = router.query;  
 
 
   const secretKey = "secret123";
@@ -96,7 +96,7 @@ const Invoice = () => {
                       <span class="far fa-check-square pe-2"></span>
                       <b>ELIGIBLE</b> |
                     </h5>
-                    <span class="ps-2">Pay</span>
+                    <span class="ps-2">Paid</span>
                   </div>
                   {/*<h4 class="text-success">{"$"+amount}</h4>*/}
 
@@ -107,7 +107,7 @@ const Invoice = () => {
                           <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden bg-green-300">
                             <div class="p-6">
                               <h2 class="tracking-widest text-lg text-black title-font font-medium  mb-1">
-                                PAYABLE AMOUNT - 
+                                PAID AMOUNT - 
                               </h2>
                               <h1 class="title-font text-3xl font-medium text-gray-900 mb-3">
                                 ${amount}
@@ -173,7 +173,7 @@ const Invoice = () => {
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example3">
-                            Name
+                            Address Name
                           </label>
                         </div>
                       </div>
@@ -235,12 +235,12 @@ const Invoice = () => {
                     </div>
                   </div>
                   <button class="text-white bg-green-400 w-full border-0 py-2 px-6 mt-10 focus:outline-none hover:bg-green-600 rounded-3xl text-lg" onClick={() => {
-                      updateSubscriptionStatus()
-                      updateTransactionId(transactionId)
-                      addNewsTransactionId(transactionId)
-                      completePayment()
+                      //updateSubscriptionStatus()
+                      //updateTransactionId(transactionId)
+                      //addNewsTransactionId(transactionId)
+                      //completePayment()
                     }}> {" "}
-                    Pay ${amount}</button>
+                    Paid ${amount}</button>
                   
                 </div>
               </div>

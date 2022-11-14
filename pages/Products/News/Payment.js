@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-
 const jwt = require("jsonwebtoken");
+
 const Payment = () => {
   const [name, setname] = useState();
   const [phone, setphone] = useState();
-  const [email, setemail] = useState();
+  const [recipent_email, setrecipent_email] = useState();
   const [address,setaddress] = useState()
   const [cardNumber, setcardNumber] = useState();
   const [holderName, setholderName] = useState();
-  const [expiration, setexpiration] = useState();
+  const [expirationMonth, setexpirationMonth] = useState();
+  const [expirationYear,setexpirationYear] = useState()
   const [cvv, setcvv] = useState();
+
+  const secretKey = "secret123";
+  const token = localStorage.getItem("token");
+  const decode_JWT = jwt.decode(token);
+  const email = decode_JWT.email;
+  console.log(email);
+  const data = { email };
+
+  
+
 
   const changeHandler = (e) => {
     if (e.target.name == "name") {
@@ -19,8 +30,8 @@ const Payment = () => {
     if (e.target.name == "phone") {
       setphone(e.target.value);
     }
-    if (e.target.name == "email") {
-      setemail(e.target.value);
+    if (e.target.name == "recipent_email") {
+      setrecipent_email(e.target.value);
     }
     if (e.target.name == "cardNumber") {
       setcardNumber(e.target.value);
@@ -29,8 +40,11 @@ const Payment = () => {
       setholderName(e.target.value);
 
     }
-    if (e.target.name == "expiration") {
-      setexpiration(e.target.value);
+    if (e.target.name == "expirationMonth") {
+      setexpirationMonth(e.target.value);
+    }
+    if (e.target.name == "expirationYear") {
+      setexpirationYear(e.target.value);
     }
     if (e.target.name == "cvv") {
       setcvv(e.target.value);
@@ -47,18 +61,63 @@ const Payment = () => {
 
   const pay = async () => {
     const responce = await fetch(
-      `http://localhost:3005/payment?amount=${amount}&name=${name}&receipt_email=${email}&line_1=${address}`
+      `http://localhost:3005/payment_card?amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&number=${cardNumber}&expiration_month=${expirationMonth}&expiration_year=${expirationYear}&cvv=${cvv}`
     );
     const res = await responce.json();
     console.log(res)
     console.log(res.body.data.id);
+    updateSubscriptionStatus()
+    updateTransactionId(res.body.data.id)
+    addNewsTransactionId(res.body.data.id)
     setTimeout(() => {
       move(res.body.data.id);
     }, 1000);
   };
 
+  const updateSubscriptionStatus = async () => {
+
+    let res = await fetch("http://localhost:3000/api/updatenewssub", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    let responce = await res.json();
+    console.log(responce);
+
+  };
+
+  const updateTransactionId = async (transactionId) =>{
+    const dataForTransactionUpdation = {email ,transactionId}
+    console.log(transactionId)
+    let res = await fetch("http://localhost:3000/api/updatetransactionid", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataForTransactionUpdation),
+    });
+    let responce = await res.json();
+    console.log(responce);
+    
+  }
+
+  const addNewsTransactionId = async (transactionIdnews) =>{
+    const dataForNewsTransactionId = {email , transactionIdnews}
+    let res = await fetch("http://localhost:3000/api/addnewspayid",{
+      method : "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify(dataForNewsTransactionId)
+    });
+    let responce = await res.json()
+    console.log(responce) 
+  }
+
   const move = (transactionId) => {
-    router.push(`/Products/News/Invoice?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${email}&line_1=${address}&phone_number=${phone}`)
+    router.push(`/Products/News/Invoice?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&phone_number=${phone}`)
   };
 
   return (
@@ -140,20 +199,40 @@ const Payment = () => {
                                   <div class="form-outline">
                                     <input
                                       type="text"
-                                      id="expiration"
-                                      value={expiration}
-                                      name="expiration"
+                                      id="expirationMonth"
+                                      value={expirationMonth}
+                                      name="expirationMonth"
                                       onChange={changeHandler}
                                       class="form-control form-control-lg"
-                                      placeholder="MM/YYYY"
+                                      placeholder="MM"
                                       size="7"
                                       minlength="7"
                                       maxlength="7"
                                     />
                                     <label class="form-label" for="typeExp">
-                                      Expiration
+                                      Expiration Month
                                     </label>
                                   </div>
+                                  
+                                  <div class="form-outline">
+                                    <input
+                                      type="text"
+                                      id="expirationYear"
+                                      value={expirationYear}
+                                      name="expirationYear"
+                                      onChange={changeHandler}
+                                      class="form-control form-control-lg"
+                                      placeholder="YY"
+                                      size="7"
+                                      minlength="7"
+                                      maxlength="7"
+                                    />
+                                    <label class="form-label" for="typeExp">
+                                      Expiration Year
+                                    </label>
+                                  </div>
+
+
                                   <div class="form-outline">
                                     <input
                                       type="password"
@@ -190,18 +269,18 @@ const Payment = () => {
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example1">
-                            Name
+                           Address Name
                           </label>
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-outline">
                           <input
-                            type="email"
-                            id="email"
-                            value={email}
+                            type="recipent_email"
+                            id="recipent_email"
+                            value={recipent_email}
                             onChange={changeHandler}
-                            name="email"
+                            name="recipent_email"
                             class="form-control"
                           />
                           <label class="form-label" for="form8Example2">
