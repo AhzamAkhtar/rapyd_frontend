@@ -23,9 +23,11 @@ const Invoice = () => {
 
   const router = useRouter();
 
-  const { transactionId  , amount , type , name , receipt_email, phone_number , line_1 } = router.query;  
+  
+  const { transactionId  , amount , type , name , receipt_email, phone_number , line_1  ,card} = router.query;  
 
-
+ 
+  console.log(card)
   const secretKey = "secret123";
   const token = localStorage.getItem("token");
   const decode_JWT = jwt.decode(token);
@@ -34,7 +36,7 @@ const Invoice = () => {
   const data = { email };
 
 
-  
+
   const updateSubscriptionStatus = async () => {
 
     let res = await fetch("http://localhost:3000/api/updatenewssub", {
@@ -106,16 +108,23 @@ const Invoice = () => {
                         <div class="p-4 ">
                           <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden bg-green-300">
                             <div class="p-6">
-                              <h2 class="tracking-widest text-lg text-black title-font font-medium  mb-1">
-                                PAID AMOUNT - 
-                              </h2>
+                              
+                             {card.boolean ? (
+                              
+                                <h6>PAID AMOUNT -</h6>
+                            
+                             ):(
+                            
+                                <h6>PAYABLE AMOUNT</h6>
+                           
+                             )}
+                              
                               <h1 class="title-font text-3xl font-medium text-gray-900 mb-3">
                                 ${amount}
                               </h1>
                               <p class="leading-relaxed mb-3 text-lg">
                                 {"Transaction Id  - "+transactionId}
                               </p>
-                              
                             </div>
                           </div>
                         </div>
@@ -239,9 +248,19 @@ const Invoice = () => {
                       //updateTransactionId(transactionId)
                       //addNewsTransactionId(transactionId)
                       //completePayment()
-                    }}> {" "}
-                    Paid ${amount}</button>
-                  
+                    }}> 
+                    {card.boolean ?(
+                      <p6>
+                    Paid ${amount}
+
+                      </p6>
+                    ):(
+                      <p6>
+                      Payable Amount ${amount}
+                      </p6>
+                    )}
+                    
+                  </button>
                 </div>
               </div>
             </div>

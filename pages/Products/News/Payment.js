@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {BsFillCreditCard2FrontFill,BsCashCoin} from 'react-icons/bs'
 import { useRouter } from "next/router";
 const jwt = require("jsonwebtoken");
 
@@ -12,6 +13,9 @@ const Payment = () => {
   const [expirationMonth, setexpirationMonth] = useState();
   const [expirationYear,setexpirationYear] = useState()
   const [cvv, setcvv] = useState();
+
+  const [payWithCard , setPayWithCard] = useState(true)
+  const [buttonText , setButtonText] = useState("Proceed and Pay")
 
   const secretKey = "secret123";
   const token = localStorage.getItem("token");
@@ -59,9 +63,9 @@ const Payment = () => {
   console.log(router.query);
   const { amount, type } = router.query;
 
-  const pay = async () => {
+  const PayWithCard = async () => {
     const responce = await fetch(
-      `http://localhost:3005/payment_card?amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&number=${cardNumber}&expiration_month=${expirationMonth}&expiration_year=${expirationYear}&cvv=${cvv}`
+      `http://localhost:3005/payment_card?amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&number=${cardNumber}&expiration_month=${expirationMonth}&expiration_year=${expirationYear}&cvv=${cvv}&card=${payWithCard}`
     );
     const res = await responce.json();
     console.log(res)
@@ -73,6 +77,22 @@ const Payment = () => {
       move(res.body.data.id);
     }, 1000);
   };
+
+  const PayWithCash = async () => {
+    const responce = await fetch(
+      `http://localhost:3005/payment?amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&card=${payWithCard}`
+    );
+    const res = await responce.json();
+    console.log(res)
+    console.log(res.body.data.id);
+    //updateSubscriptionStatus()
+    //updateTransactionId(res.body.data.id)
+    //addNewsTransactionId(res.body.data.id)
+    setTimeout(() => {
+      move(res.body.data.id);
+    }, 1000);
+  };
+
 
   const updateSubscriptionStatus = async () => {
 
@@ -117,11 +137,21 @@ const Payment = () => {
   }
 
   const move = (transactionId) => {
-    router.push(`/Products/News/Invoice?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&phone_number=${phone}`)
+    router.push(`/Products/News/Invoice?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&phone_number=${phone}&card=${payWithCard}`)
   };
 
   return (
     <>
+    <div class="flex justify-center">
+        <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={()=>{
+          setPayWithCard(true)
+          setButtonText("Proceed and Pay")
+        }}> <BsFillCreditCard2FrontFill className="text-3xl mx-2"/>Pay Through Card</button>
+        <button class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg " onClick={()=>{
+          setPayWithCard(false)
+          setButtonText("Generate Payment ID")
+        }}  ><BsCashCoin className="text-3xl mx-2" />Pay Through Cash</button>
+      </div>
       <section>
         <div class="container py-5">
           <div class="card">
@@ -150,7 +180,8 @@ const Payment = () => {
                       <div class="row d-flex justify-content-center ">
                         <div class="col-md-10 col-lg-10 col-xl-12">
                           <div class="card">
-                            <div class="card-body p-4">
+                            <div class="card-body p-4"> 
+                            {payWithCard && 
                               <form>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                   <div class="form-outline">
@@ -251,7 +282,7 @@ const Payment = () => {
                                     </label>
                                   </div>
                                 </div>
-                              </form>
+                              </form>}
                             </div>
                           </div>
                         </div>
@@ -330,17 +361,18 @@ const Payment = () => {
                     type="button"
                     class="btn btn-success w-full rounded-pill"
                     onClick={() => {
-                      pay();
+                      if(payWithCard==true){
+                      PayWithCard();
+
+                      }
+                      else{
+                        PayWithCash()
+                      }
                     }}
                   >
-                    Proceed and Pay
+                    {buttonText}
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-warning w-full rounded-pill mt-2"
-                  >
-                    Generate Invoice and Pay
-                  </button>
+                 
                 </div>
 
                 <div class="col-md-5 col-xl-4 offset-xl-1">
