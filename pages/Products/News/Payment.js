@@ -89,7 +89,7 @@ const Payment = () => {
     //updateTransactionId(res.body.data.id)
     //addNewsTransactionId(res.body.data.id)
     setTimeout(() => {
-      move(res.body.data.id);
+      movenew(res.body.data.id);
     }, 1000);
   };
 
@@ -139,6 +139,11 @@ const Payment = () => {
   const move = (transactionId) => {
     router.push(`/Products/News/Invoice?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&phone_number=${phone}&card=${payWithCard}`)
   };
+
+  const movenew = (transactionId) => {
+    router.push(`/Products/News/InvoiceCash?transactionId=${transactionId}&amount=${amount}&name=${name}&receipt_email=${recipent_email}&line_1=${address}&phone_number=${phone}&card=${payWithCard}`)
+  };
+
 
   return (
     <>
