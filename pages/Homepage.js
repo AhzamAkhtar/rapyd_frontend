@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 const jwt = require("jsonwebtoken");
 const Homepage = () => {
+  const router = useRouter()
   const [text, settext] = useState("Subscribe Now");
   const [link, setLink] = useState("");
   const [isSubcribed, setisSubcribed] = useState();
@@ -177,7 +179,9 @@ const Homepage = () => {
                       <p>Not Subscribed</p>
                     </>
                   )}
-                  
+                  <button onClick={()=>{
+                    router.push("/UserProfile")
+                  }}>User Profile</button>
                 </div>
               </div>
             </div>
