@@ -9,7 +9,8 @@ const handler = async (req,res) =>{
         const userinfoarray = {
             "name" : user.name,
             "email" : user.email,
-            "newsTransactinId" : user.newspayment
+            "newsTransactinId" : user.newspayment,
+            "allTransaction" : user.allpayments
         }
         res.status(200).json({success: userinfoarray})
     }

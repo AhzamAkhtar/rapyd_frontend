@@ -1,7 +1,10 @@
 import React, { useState ,useEffect, use } from "react";
 const jwt = require("jsonwebtoken");
 const UserProfile = () => {
-  const [userData , setUserData] = useState()
+  const [name , setname] = useState()
+  const [useremail , setuserEmail] = useState()
+  const [newsTransactionId, setNewtransactionId] = useState()
+  const [allTransaction , setAllTransaction] = useState()
   const secretKey = "secret123";
   const token = localStorage.getItem("token");
   const decode_JWT = jwt.decode(token);
@@ -19,8 +22,10 @@ const UserProfile = () => {
       });
       const res = await responce.json();
       console.log(res.success);
-      setUserData(res.success)
-      console.log(userData)
+      setname(res.success.name)
+      setuserEmail(res.success.email)
+      setNewtransactionId(res.success.newsTransactinId)
+      setAllTransaction(res.success.allTransaction)
     };
     getUserInfo()
   }, [])
@@ -58,7 +63,7 @@ const UserProfile = () => {
                     alt="avatar"
                     class="rounded-circle img-fluid"
                   />
-                  <h5 class="my-3">{userData.name}</h5>
+                  <h5 class="my-3">tt</h5>
                   <p class="text-muted mb-1">Full Stack Developer</p>
                   <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
                   <div class="d-flex justify-content-center mb-2">
@@ -81,7 +86,7 @@ const UserProfile = () => {
                       <p class="mb-0">Full Name</p>
                     </div>
                     <div class="col-sm-9">
-                      <p class="text-muted mb-0">{userData.name}</p>
+                      <p class="text-muted mb-0">{name}</p>
                     </div>
                   </div>
                   <hr />
@@ -90,7 +95,7 @@ const UserProfile = () => {
                       <p class="mb-0">Email</p>
                     </div>
                     <div class="col-sm-9">
-                      <p class="text-muted mb-0">{userData.email}</p>
+                      <p class="text-muted mb-0">{useremail}</p>
                     </div>
                   </div>
                   <hr />
@@ -102,13 +107,20 @@ const UserProfile = () => {
                     </div>
                     <div class="col-sm-9">
                   
-                      <p class="text-muted mb-0">{userData.newsTransactinId}</p>
+                      <p class="text-muted mb-0">{newsTransactionId}</p>
                     </div>
                   </div>
                   <hr />
-                  
-                  
-                  
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Transaction IDS</p>
+                    
+                    </div>
+                    <div class="col-sm-9">
+                
+                      <p class="text-muted mb-0">{allTransaction}</p>
+                    </div>
+                  </div>          
                 </div>
               </div>
             </div>
