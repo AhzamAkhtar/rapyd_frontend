@@ -33,6 +33,8 @@ export default function Home() {
                   Poke slow-carb mixtape knausgaard, typewriter street art
                   gentrify hammock starladder roathse. Craies vegan tousled etsy
                   austin.
+                  Slow-carb next level shoindcgoitch ethical authentic, poko
+                  scenester 
                 </p>
               </div>
               <div class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
