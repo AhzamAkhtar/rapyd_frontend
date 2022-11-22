@@ -181,7 +181,7 @@ const Homepage = () => {
                   )}
                   <button onClick={()=>{
                     router.push("/UserProfile")
-                  }}>User Profile</button>
+                  }}>User Profile Button</button>
                 </div>
               </div>
             </div>
